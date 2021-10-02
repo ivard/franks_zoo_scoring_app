@@ -1,31 +1,29 @@
 import 'package:flutter/material.dart';
 
 class AppContainer extends StatelessWidget {
-  static const double _maxBodyWidth = 500;
-  static const double _padding = 15;
-
   final String title;
-  final Widget child;
+  final Widget body;
+  final Widget? footer;
+
+  final Widget? action;
 
   const AppContainer({
     Key? key,
     required this.title,
-    required this.child,
+    required this.body,
+    this.footer,
+    this.action,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           title: Text(title),
+          actions: action != null ? [action!] : null,
         ),
         body: SingleChildScrollView(
-          child: Container(
-            constraints: BoxConstraints.loose(
-              const Size.fromWidth(_maxBodyWidth),
-            ),
-            padding: const EdgeInsets.all(_padding),
-            child: child,
-          ),
+          child: body,
         ),
+        persistentFooterButtons: footer != null ? [footer!] : null,
       );
 }

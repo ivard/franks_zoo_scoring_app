@@ -1,17 +1,35 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility that Flutter provides. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:franks_zoo_scoring_app/main.dart';
+import 'package:franks_zoo_scoring_app/src/screens/add_players_screen.dart';
 
 void main() {
-  testWidgets('Smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const FranksZooScoringApp());
+  testWidgets('add-players', (WidgetTester tester) async {
+    final selected = Completer<List<String>>();
+    await tester.pumpWidget(MaterialApp(
+      home: AddPlayersScreen(
+        onPlayersSelected: (players) => selected.complete(players),
+      ),
+    ));
+
+    await tester.tap(find.text('Doorgaan'));
+    await tester.pumpAndSettle();
+    expect(selected.isCompleted, false);
+
+    // Test add player button
+    await tester.enterText(find.byType(TextField), 'Player 1');
+    await tester.tap(find.byType(IconButton));
+    await tester.pump();
+
+    // Test entering enter button
+    await tester.enterText(find.byType(TextField), 'Player 2');
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pump();
+
+    await tester.tap(find.text('Doorgaan'));
+    await tester.pump();
+    expect(await selected.future, ['Player 1', 'Player 2']);
   });
 }
