@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:franks_zoo_scoring_app/src/widgets/app_container.dart';
 
 class AddPlayersScreen extends StatefulWidget {
-  final Function(List<String>) onPlayersSelected;
+  final Function(Set<String>) onPlayersSelected;
 
   const AddPlayersScreen({
     Key? key,
@@ -40,7 +40,7 @@ class _AddPlayersScreenState extends State<AddPlayersScreen> {
         ),
       );
     } else {
-      widget.onPlayersSelected(_players);
+      widget.onPlayersSelected(_players.toSet());
     }
   }
 

@@ -7,29 +7,42 @@ import 'package:franks_zoo_scoring_app/src/screens/add_players_screen.dart';
 
 void main() {
   testWidgets('add-players', (WidgetTester tester) async {
-    final selected = Completer<List<String>>();
+    final selected = Completer<Set<String>>();
     await tester.pumpWidget(MaterialApp(
       home: AddPlayersScreen(
         onPlayersSelected: (players) => selected.complete(players),
       ),
     ));
 
+    final noPlayersFound = find.text('Geen spelers gevonden.');
+    expect(noPlayersFound, findsNothing);
     await tester.tap(find.text('Doorgaan'));
+    await tester.pump();
+    expect(noPlayersFound, findsOneWidget);
     await tester.pumpAndSettle();
     expect(selected.isCompleted, false);
 
-    // Test add player button
+    // TODO: Add test to remove user.
+
+    // Test to add player by pressing button
     await tester.enterText(find.byType(TextField), 'Player 1');
     await tester.tap(find.byType(IconButton));
-    await tester.pump();
+    await tester.pumpAndSettle();
 
-    // Test entering enter button
+    // Test to delete a player
     await tester.enterText(find.byType(TextField), 'Player 2');
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pump();
+    await tester.drag(find.text('Player 2'), const Offset(500, 0));
+    await tester.pumpAndSettle();
+
+    // Test to add player by entering enter button
+    await tester.enterText(find.byType(TextField), 'Player 3');
     await tester.testTextInput.receiveAction(TextInputAction.done);
     await tester.pump();
 
     await tester.tap(find.text('Doorgaan'));
     await tester.pump();
-    expect(await selected.future, ['Player 1', 'Player 2']);
+    expect(await selected.future, {'Player 1', 'Player 3'});
   });
 }
