@@ -21,9 +21,7 @@ class AppContainer extends StatelessWidget {
           title: Text(title),
           actions: action != null ? [action!] : null,
         ),
-        body: SingleChildScrollView(
-          child: body,
-        ),
+        body: body,
         persistentFooterButtons: footer != null ? [footer!] : null,
       );
 }

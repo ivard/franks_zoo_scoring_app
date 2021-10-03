@@ -2,8 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:franks_zoo_scoring_app/src/blocs/events.dart';
+import 'package:franks_zoo_scoring_app/src/blocs/model.dart';
 
 import 'package:franks_zoo_scoring_app/src/screens/add_players_screen.dart';
+import 'package:franks_zoo_scoring_app/src/screens/enter_result_screen.dart';
 
 void main() {
   testWidgets('add-players', (WidgetTester tester) async {
@@ -44,5 +47,24 @@ void main() {
     await tester.tap(find.text('Doorgaan'));
     await tester.pump();
     expect(await selected.future, {'Player 1', 'Player 3'});
+  });
+
+  testWidgets('enter-result', (WidgetTester tester) async {
+    final completer = EnterResult();
+    await tester.pumpWidget(MaterialApp(
+      home: EnterResultScreen(
+        prevScore: GameScore(players: {'Player 1', 'Player 2'}),
+        completer: completer,
+      ),
+    ));
+    //final secondListTile = find.widgetWithText(ListTile, 'Player 2');
+
+    // TODO: Fix
+
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Doorgaan'));
+    await tester.pump();
+
+    //expect(await completer.future, ['Player 2', 'Player 1']);
   });
 }

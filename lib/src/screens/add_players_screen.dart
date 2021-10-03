@@ -53,7 +53,7 @@ class _AddPlayersScreenState extends State<AddPlayersScreen> {
           child: const Text('Doorgaan'),
           onPressed: _onContinue,
         ),
-        body: Column(
+        body: ListView(
           children: ListTile.divideTiles(
             context: context,
             tiles: _players.asMap().entries.map(
