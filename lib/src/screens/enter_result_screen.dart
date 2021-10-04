@@ -1,17 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:franks_zoo_scoring_app/src/blocs/events.dart';
-import 'package:franks_zoo_scoring_app/src/blocs/model.dart';
+import 'package:franks_zoo_scoring_app/src/data/events.dart';
+import 'package:franks_zoo_scoring_app/src/data/model.dart';
 import 'package:franks_zoo_scoring_app/src/widgets/app_container.dart';
 
 class EnterResultScreen extends StatefulWidget {
   final GameScore prevScore;
-  final EnterResult completer;
+  final Function(EnterRoundResult) callback;
 
   const EnterResultScreen({
     Key? key,
     required this.prevScore,
-    required this.completer,
+    required this.callback,
   }) : super(key: key);
 
   @override
@@ -34,7 +34,7 @@ class _EnterResultScreenState extends State<EnterResultScreen> {
           style: TextButton.styleFrom(
               primary: Theme.of(context).colorScheme.onPrimary),
           child: const Text('Doorgaan'),
-          onPressed: () => widget.completer.complete(_result),
+          onPressed: () => widget.callback(EnterRoundResult(_result)),
         ),
         body: ReorderableListView.builder(
           itemCount: _result.length,

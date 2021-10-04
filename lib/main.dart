@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:franks_zoo_scoring_app/src/blocs/controller.dart';
-import 'package:franks_zoo_scoring_app/src/blocs/model.dart';
+import 'package:franks_zoo_scoring_app/src/data/repository.dart';
+import 'package:franks_zoo_scoring_app/src/data/model.dart';
 import 'package:franks_zoo_scoring_app/src/screens/add_players_screen.dart';
 import 'package:franks_zoo_scoring_app/src/screens/game_round_screen.dart';
 
@@ -14,15 +14,15 @@ class FranksZooScoringApp extends StatelessWidget {
   FranksZooScoringApp({Key? key}) : super(key: key);
 
   void _startGame(Set<Player> players) {
-    final controller = GameController(players: players);
+    final repository = GameRepository(players: players);
     _navigatorKey.currentState!.push(MaterialPageRoute(
       builder: (context) => StreamBuilder<GameScore>(
-        stream: controller.getScores(),
+        stream: repository.getScores(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return Container();
           final score = snapshot.data!;
           return GameRoundScreen(
-            stream: controller.startNewRound(),
+            bloc: repository.startNewRound(),
             prevScore: score,
           );
         },

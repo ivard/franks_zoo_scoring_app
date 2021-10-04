@@ -33,16 +33,20 @@ class GameRound {
   final List<Player> result;
   final Set<Player> hasHedgehogs;
   final Map<Player, int> numberOfLions;
+  final int lionsInHandLastPlayer;
 
   GameRound({
     required this.result,
     required this.hasHedgehogs,
     required this.numberOfLions,
+    required this.lionsInHandLastPlayer,
   });
 
   int getScore(Player player) {
     int newScore = 0;
-    if (result.last != player) {
+    if (result.last == player) {
+      newScore -= lionsInHandLastPlayer;
+    } else {
       newScore += result.length - result.indexOf(player);
     }
     if (!hasHedgehogs.contains(player)) newScore -= 1;

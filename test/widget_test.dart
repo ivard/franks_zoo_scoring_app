@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:franks_zoo_scoring_app/src/blocs/events.dart';
-import 'package:franks_zoo_scoring_app/src/blocs/model.dart';
+import 'package:franks_zoo_scoring_app/src/data/events.dart';
+import 'package:franks_zoo_scoring_app/src/data/model.dart';
 
 import 'package:franks_zoo_scoring_app/src/screens/add_players_screen.dart';
 import 'package:franks_zoo_scoring_app/src/screens/enter_result_screen.dart';
@@ -50,11 +50,11 @@ void main() {
   });
 
   testWidgets('enter-result', (WidgetTester tester) async {
-    final completer = EnterResult();
+    final completer = Completer<EnterRoundResult>();
     await tester.pumpWidget(MaterialApp(
       home: EnterResultScreen(
         prevScore: GameScore(players: {'Player 1', 'Player 2'}),
-        completer: completer,
+        callback: completer.complete,
       ),
     ));
     //final secondListTile = find.widgetWithText(ListTile, 'Player 2');
