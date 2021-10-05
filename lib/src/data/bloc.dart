@@ -8,8 +8,8 @@ class GameRoundBloc {
 
   final _resultCompleter = Completer<List<Player>>();
 
-  late EnterRoundResult? _resultEvent;
-  late EnterRoundTricks? _tricksEvent;
+  EnterRoundResult? _resultEvent;
+  EnterRoundTricks? _tricksEvent;
 
   GameRoundBloc(this.callback);
 

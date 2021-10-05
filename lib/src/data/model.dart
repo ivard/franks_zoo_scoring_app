@@ -40,7 +40,20 @@ class GameRound {
     required this.hasHedgehogs,
     required this.numberOfLions,
     required this.lionsInHandLastPlayer,
-  });
+  }) {
+    if (hasHedgehogs.any((p) => !result.contains(p)) ||
+        numberOfLions.keys.toSet() != result.toSet()) {
+      throw Exception('Unknown player');
+    }
+    if (hasHedgehogs.length > 5) throw Exception('Too much hedgehogs');
+    final allLions = [...numberOfLions.values, lionsInHandLastPlayer];
+    if (allLions.any((i) => i < 0 || i > 5)) {
+      throw Exception('Invalid number of lions');
+    }
+    if (allLions.fold<int>(0, (prev, curr) => prev + curr) > 5) {
+      throw Exception('Too much lions');
+    }
+  }
 
   int getScore(Player player) {
     int newScore = 0;

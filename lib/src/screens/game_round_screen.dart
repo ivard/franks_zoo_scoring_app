@@ -3,6 +3,7 @@ import 'package:franks_zoo_scoring_app/src/data/model.dart';
 import 'package:franks_zoo_scoring_app/src/data/bloc.dart';
 
 import 'enter_result_screen.dart';
+import 'enter_tricks_screen.dart';
 
 class GameRoundScreen extends StatelessWidget {
   final GameRoundBloc bloc;
@@ -25,9 +26,12 @@ class GameRoundScreen extends StatelessWidget {
             );
           }
 
-          final result = snapshot.data;
+          final result = snapshot.data!;
 
-          throw UnsupportedError('Screen not implemented');
+          return EnterTricksScreen(
+            result: result,
+            callback: bloc.add,
+          );
         },
       );
 }

@@ -29,7 +29,7 @@ class _EnterResultScreenState extends State<EnterResultScreen> {
 
   @override
   Widget build(BuildContext context) => AppContainer(
-        title: 'Uitslag ronde ${widget.prevScore.numberOfRounds + 1}',
+        title: 'Invoeren uitslag ronde ${widget.prevScore.numberOfRounds + 1}',
         action: TextButton(
           style: TextButton.styleFrom(
               primary: Theme.of(context).colorScheme.onPrimary),
