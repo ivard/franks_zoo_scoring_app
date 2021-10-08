@@ -33,26 +33,38 @@ class GameRound {
   final List<Player> result;
   final Set<Player> hasHedgehogs;
   final Map<Player, int> numberOfLions;
-  final int lionsInHandLastPlayer;
+  int lionsInHandLastPlayer;
 
   GameRound({
     required this.result,
-    required this.hasHedgehogs,
-    required this.numberOfLions,
-    required this.lionsInHandLastPlayer,
-  }) {
-    if (hasHedgehogs.any((p) => !result.contains(p)) ||
-        numberOfLions.keys.toSet() != result.toSet()) {
-      throw Exception('Unknown player');
+  })  : hasHedgehogs = {},
+        numberOfLions = Map.fromIterable(result, value: (_) => 0),
+        lionsInHandLastPlayer = 0;
+
+  void validate() {
+    final amountLions = [...numberOfLions.values, lionsInHandLastPlayer]
+        .fold<int>(0, (prev, curr) => prev + curr);
+    if (amountLions < 0 || amountLions > 5 || hasHedgehogs.length > 5) {
+      throw InvalidScoreException();
     }
-    if (hasHedgehogs.length > 5) throw Exception('Too much hedgehogs');
-    final allLions = [...numberOfLions.values, lionsInHandLastPlayer];
-    if (allLions.any((i) => i < 0 || i > 5)) {
-      throw Exception('Invalid number of lions');
+  }
+
+  void setHasHedgehogs(Player player, bool value) {
+    if (value) {
+      hasHedgehogs.add(player);
+    } else {
+      hasHedgehogs.remove(player);
     }
-    if (allLions.fold<int>(0, (prev, curr) => prev + curr) > 5) {
-      throw Exception('Too much lions');
-    }
+  }
+
+  void setNumberOfLions(Player player, int number) {
+    assert(number >= 0 && number <= 5);
+    numberOfLions[player] = number;
+  }
+
+  void setLionsInHandLastPlayer(int number) {
+    assert(number >= 0 && number <= 5);
+    lionsInHandLastPlayer = number;
   }
 
   int getScore(Player player) {
@@ -67,3 +79,5 @@ class GameRound {
     return newScore;
   }
 }
+
+class InvalidScoreException implements Exception {}

@@ -8,14 +8,32 @@ class EnterRoundResult extends GameEvent {
   EnterRoundResult(this.result);
 }
 
-class EnterRoundTricks extends GameEvent {
-  final Set<Player> hasHedgehogs;
-  final Map<Player, int> numberOfLions;
-  final int lionsInHandLastPlayer;
+class HasHedgehogs extends GameEvent {
+  final Player player;
+  final bool value;
 
-  EnterRoundTricks({
-    required this.hasHedgehogs,
-    required this.numberOfLions,
-    required this.lionsInHandLastPlayer,
+  HasHedgehogs({
+    required this.player,
+    this.value = true,
   });
 }
+
+class NumberOfLions extends GameEvent {
+  final Player player;
+  final int number;
+
+  NumberOfLions({
+    required this.player,
+    required this.number,
+  });
+}
+
+class LionsInHandLastPlayer extends GameEvent {
+  final int number;
+
+  LionsInHandLastPlayer({
+    required this.number,
+  });
+}
+
+class FinalizeRound extends GameEvent {}

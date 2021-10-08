@@ -26,10 +26,8 @@ class GameRoundScreen extends StatelessWidget {
             );
           }
 
-          final result = snapshot.data!;
-
           return EnterTricksScreen(
-            result: result,
+            stream: bloc.stream,
             callback: bloc.add,
           );
         },

@@ -7,11 +7,13 @@ class GameRoundBloc {
   final Function(GameRound) callback;
 
   final _resultCompleter = Completer<List<Player>>();
+  final _streamController = StreamController<GameRound>();
 
-  EnterRoundResult? _resultEvent;
-  EnterRoundTricks? _tricksEvent;
+  late GameRound _gameRound;
 
   GameRoundBloc(this.callback);
+
+  Stream<GameRound> get stream => _streamController.stream;
 
   // Only state this bloc has is whether the result is known or not.
   // We return this as a future.
@@ -20,24 +22,29 @@ class GameRoundBloc {
   void add(GameEvent event) {
     switch (event.runtimeType) {
       case EnterRoundResult:
-        _resultEvent = event as EnterRoundResult;
+        event = event as EnterRoundResult;
+        _gameRound = GameRound(result: event.result);
         _resultCompleter.complete(event.result);
         break;
-      case EnterRoundTricks:
-        _tricksEvent = event as EnterRoundTricks;
+      case HasHedgehogs:
+        event = event as HasHedgehogs;
+        _gameRound.setHasHedgehogs(event.player, event.value);
+        break;
+      case NumberOfLions:
+        event = event as NumberOfLions;
+        _gameRound.setNumberOfLions(event.player, event.number);
+        break;
+      case LionsInHandLastPlayer:
+        event = event as LionsInHandLastPlayer;
+        _gameRound.setLionsInHandLastPlayer(event.number);
+        break;
+      case FinalizeRound:
+        _gameRound.validate();
+        callback(_gameRound);
         break;
       default:
         throw UnsupportedError('Unknown game event');
     }
-
-    // If all events are in, we can determine the result.
-    if (_resultEvent != null && _tricksEvent != null) {
-      callback(GameRound(
-        result: _resultEvent!.result,
-        hasHedgehogs: _tricksEvent!.hasHedgehogs,
-        numberOfLions: _tricksEvent!.numberOfLions,
-        lionsInHandLastPlayer: _tricksEvent!.lionsInHandLastPlayer,
-      ));
-    }
+    _streamController.add(_gameRound);
   }
 }
