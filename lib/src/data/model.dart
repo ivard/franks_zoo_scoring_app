@@ -14,8 +14,13 @@ class GameScore {
 
   int get numberOfRounds => _rounds.length;
 
-  int getScore(Player player) =>
-      _rounds.fold(0, (prevScore, round) => prevScore + round.getScore(player));
+  int getScore(Player player) {
+    int score = 0;
+    for (int i = 0; i < _rounds.length; i++) {
+      score += _rounds[i].getScore(player, i > 0 ? _rounds[i - 1] : null);
+    }
+    return score;
+  }
 
   List<Player> getRanking() {
     final playersList = players.toList();
@@ -68,15 +73,30 @@ class GameRound {
     lionsInHandLastPlayer = number;
   }
 
-  int getScore(Player player) {
-    int newScore = 0;
-    if (result.last == player) {
-      newScore -= lionsInHandLastPlayer;
-    } else {
-      newScore += result.length - result.indexOf(player);
+  Player? getTeamMate(Player player) {
+    final upperPlayers =
+        result.getRange(0, (result.length / 2).ceil()).toList();
+    final lowerPlayers =
+        result.getRange((result.length / 2).ceil(), result.length).toList();
+    return upperPlayers.contains(player)
+        ? lowerPlayers[upperPlayers.indexOf(player)]
+        : upperPlayers[lowerPlayers.indexOf(player)];
+  }
+
+  int _getRankingScore(Player player) =>
+      result.last == player ? 0 : result.length - result.indexOf(player);
+
+  int getScore(Player player, GameRound? prevRound) {
+    int newScore = _getRankingScore(player);
+    if (prevRound != null) {
+      if (result.last == player) {
+        newScore -= lionsInHandLastPlayer;
+      }
+      final teamMate = prevRound.getTeamMate(player);
+      newScore += teamMate == null ? 4 : _getRankingScore(teamMate);
+      if (!hasHedgehogs.contains(player)) newScore -= 1;
+      newScore += numberOfLions[player]! >= 2 ? numberOfLions[player]! : 0;
     }
-    if (!hasHedgehogs.contains(player)) newScore -= 1;
-    newScore += numberOfLions[player]! >= 2 ? numberOfLions[player]! : 0;
     return newScore;
   }
 }
