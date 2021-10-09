@@ -3,6 +3,7 @@ import 'package:franks_zoo_scoring_app/src/data/repository.dart';
 import 'package:franks_zoo_scoring_app/src/data/model.dart';
 import 'package:franks_zoo_scoring_app/src/screens/add_players_screen.dart';
 import 'package:franks_zoo_scoring_app/src/screens/game_round_screen.dart';
+import 'package:franks_zoo_scoring_app/src/screens/score_overview_screen.dart';
 
 void main() {
   runApp(FranksZooScoringApp());
@@ -20,10 +21,21 @@ class FranksZooScoringApp extends StatelessWidget {
         stream: repository.getScores(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return Container();
+
           final score = snapshot.data!;
-          return GameRoundScreen(
-            bloc: repository.startNewRound(),
-            prevScore: score,
+
+          return ScoreOverviewScreen(
+            score: score,
+            onContinue: () => _navigatorKey.currentState!.push(
+              MaterialPageRoute(
+                builder: (BuildContext context) => GameRoundScreen(
+                  bloc: repository.startNewRound(
+                    onFinished: () => _navigatorKey.currentState!.pop(),
+                  ),
+                  prevScore: score,
+                ),
+              ),
+            ),
           );
         },
       ),

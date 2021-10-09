@@ -13,7 +13,10 @@ class GameRepository {
 
   Stream<GameScore> getScores() => _scoreSubject.stream;
 
-  GameRoundBloc startNewRound() => GameRoundBloc(
-        (round) => _scoreSubject.add(_scoreSubject.value.addRound(round)),
+  GameRoundBloc startNewRound({Function()? onFinished}) => GameRoundBloc(
+        (round) {
+          _scoreSubject.add(_scoreSubject.value.addRound(round));
+          if (onFinished != null) onFinished();
+        },
       );
 }
