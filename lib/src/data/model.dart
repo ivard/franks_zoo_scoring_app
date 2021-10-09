@@ -23,9 +23,10 @@ class GameScore {
       final comparedScore = getScore(a).compareTo(getScore(b));
       if (comparedScore != 0 || _rounds.isEmpty) return comparedScore;
       final lastResult = _rounds.last.result;
-      return lastResult.indexOf(a).compareTo(lastResult.indexOf(b));
+      // The worst ranked player gets preference.
+      return -1 * lastResult.indexOf(a).compareTo(lastResult.indexOf(b));
     });
-    return playersList;
+    return playersList.reversed.toList();
   }
 }
 
