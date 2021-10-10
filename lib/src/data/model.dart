@@ -1,5 +1,28 @@
 typedef Player = String;
 
+class Pairs {
+  final List<List<Player>> _internal = [];
+
+  Pairs({required List<Player> ranking}) {
+    final upperPlayers =
+        ranking.getRange(0, (ranking.length / 2).ceil()).toList();
+    final lowerPlayers =
+        ranking.getRange((ranking.length / 2).ceil(), ranking.length).toList();
+    for (int i = 0; i < upperPlayers.length; i++) {
+      if (i < lowerPlayers.length) {
+        _internal.add([upperPlayers[i], lowerPlayers[i]]);
+      }
+    }
+  }
+
+  bool hasTeamMate(Player player) =>
+      _internal.any((pair) => pair.contains(player));
+
+  Player getTeamMate(Player player) => _internal
+      .firstWhere((pair) => pair.contains(player))
+      .firstWhere((p) => p != player);
+}
+
 class GameScore {
   final Set<Player> players;
   final List<GameRound> _rounds;
@@ -17,7 +40,7 @@ class GameScore {
   int getScore(Player player) {
     int score = 0;
     for (int i = 0; i < _rounds.length; i++) {
-      score += _rounds[i].getScore(player, i > 0 ? _rounds[i - 1] : null);
+      score += _rounds[i].getScore(player);
     }
     return score;
   }
@@ -33,15 +56,20 @@ class GameScore {
     });
     return playersList.reversed.toList();
   }
+
+  Pairs? getPairsForNextRound() =>
+      _rounds.isNotEmpty ? Pairs(ranking: getRanking()) : null;
 }
 
 class GameRound {
+  final Pairs? pairs;
   final List<Player> result;
   final Set<Player> hasHedgehogs;
   final Map<Player, int> numberOfLions;
   int lionsInHandLastPlayer;
 
   GameRound({
+    this.pairs,
     required this.result,
   })  : hasHedgehogs = {},
         numberOfLions = Map.fromIterable(result, value: (_) => 0),
@@ -73,27 +101,18 @@ class GameRound {
     lionsInHandLastPlayer = number;
   }
 
-  Player? getTeamMate(Player player) {
-    final upperPlayers =
-        result.getRange(0, (result.length / 2).ceil()).toList();
-    final lowerPlayers =
-        result.getRange((result.length / 2).ceil(), result.length).toList();
-    return upperPlayers.contains(player)
-        ? lowerPlayers[upperPlayers.indexOf(player)]
-        : upperPlayers[lowerPlayers.indexOf(player)];
-  }
-
   int _getRankingScore(Player player) =>
       result.last == player ? 0 : result.length - result.indexOf(player);
 
-  int getScore(Player player, GameRound? prevRound) {
+  int getScore(Player player) {
     int newScore = _getRankingScore(player);
-    if (prevRound != null) {
+    if (pairs != null) {
       if (result.last == player) {
         newScore -= lionsInHandLastPlayer;
       }
-      final teamMate = prevRound.getTeamMate(player);
-      newScore += teamMate == null ? 4 : _getRankingScore(teamMate);
+      newScore += pairs!.hasTeamMate(player)
+          ? _getRankingScore(pairs!.getTeamMate(player))
+          : 4;
       if (!hasHedgehogs.contains(player)) newScore -= 1;
       newScore += numberOfLions[player]! >= 2 ? numberOfLions[player]! : 0;
     }

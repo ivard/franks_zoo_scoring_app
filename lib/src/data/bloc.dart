@@ -4,6 +4,7 @@ import 'package:franks_zoo_scoring_app/src/data/model.dart';
 import 'package:franks_zoo_scoring_app/src/data/events.dart';
 
 class GameRoundBloc {
+  final Pairs? pairs;
   final Function(GameRound) callback;
 
   final _resultCompleter = Completer<List<Player>>();
@@ -11,7 +12,7 @@ class GameRoundBloc {
 
   late GameRound _gameRound;
 
-  GameRoundBloc(this.callback);
+  GameRoundBloc({required this.callback, this.pairs});
 
   Stream<GameRound> get stream => _streamController.stream;
 
@@ -23,7 +24,7 @@ class GameRoundBloc {
     switch (event.runtimeType) {
       case EnterRoundResult:
         event = event as EnterRoundResult;
-        _gameRound = GameRound(result: event.result);
+        _gameRound = GameRound(pairs: pairs, result: event.result);
         _resultCompleter.complete(event.result);
         break;
       case HasHedgehogs:

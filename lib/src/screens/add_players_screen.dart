@@ -33,10 +33,12 @@ class _AddPlayersScreenState extends State<AddPlayersScreen> {
   }
 
   void _onContinue() {
-    if (_players.isEmpty) {
+    if (_players.length < 3) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Geen spelers gevonden.'),
+          content: Text(
+            'Te weinig spelers gevonden. Het minimale aantal spelers is 3.',
+          ),
         ),
       );
     } else {

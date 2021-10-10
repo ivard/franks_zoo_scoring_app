@@ -14,7 +14,8 @@ class GameRepository {
   Stream<GameScore> getScores() => _scoreSubject.stream;
 
   GameRoundBloc startNewRound({Function()? onFinished}) => GameRoundBloc(
-        (round) {
+        pairs: _scoreSubject.value.getPairsForNextRound(),
+        callback: (round) {
           _scoreSubject.add(_scoreSubject.value.addRound(round));
           if (onFinished != null) onFinished();
         },
