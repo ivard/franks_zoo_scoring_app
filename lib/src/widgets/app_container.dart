@@ -17,11 +17,16 @@ class AppContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: Text(title),
-          actions: action != null ? [action!] : null,
-        ),
-        body: body,
-        persistentFooterButtons: footer != null ? [footer!] : null,
-      );
+      appBar: AppBar(
+        title: Text(title),
+        actions: action != null ? [action!] : null,
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Expanded(child: body),
+          if (footer != null) BottomAppBar(child: footer!),
+        ],
+      ));
 }

@@ -61,9 +61,11 @@ class ScoreOverviewScreen extends StatelessWidget {
                     color: Theme.of(context).primaryTextTheme.bodyText1?.color,
                   ),
                   const SizedBox(width: 5),
-                  Text(
-                    'De teamleden voor de volgende ronde zijn met kleur gemarkeerd.',
-                    style: Theme.of(context).primaryTextTheme.bodyText1,
+                  Expanded(
+                    child: Text(
+                      'De teamleden voor de volgende ronde zijn met kleur gemarkeerd.',
+                      style: Theme.of(context).primaryTextTheme.bodyText1,
+                    ),
                   ),
                 ]),
               ),

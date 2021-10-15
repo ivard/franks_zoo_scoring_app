@@ -85,24 +85,28 @@ class _AddPlayersScreenState extends State<AddPlayersScreen> {
                 ),
           ).toList(),
         ),
-        footer: Row(
-          children: [
-            Expanded(
-              child: TextField(
-                decoration: const InputDecoration(
-                  hintText: 'Naam van speler',
+        footer: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  decoration: const InputDecoration(
+                    hintText: 'Naam van speler',
+                  ),
+                  controller: _inputController,
+                  onSubmitted: (_) => _addPlayer(),
                 ),
-                controller: _inputController,
-                onSubmitted: (_) => _addPlayer(),
               ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.add),
-              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-              splashRadius: 30,
-              onPressed: _addPlayer,
-            ),
-          ],
+              IconButton(
+                icon: const Icon(Icons.add),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                splashRadius: 30,
+                onPressed: _addPlayer,
+              ),
+            ],
+          ),
         ),
       );
 }
