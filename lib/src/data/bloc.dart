@@ -2,30 +2,27 @@ import 'dart:async';
 
 import 'package:franks_zoo_scoring_app/src/data/model.dart';
 import 'package:franks_zoo_scoring_app/src/data/events.dart';
+import 'package:rxdart/rxdart.dart';
 
 class GameRoundBloc {
   final Pairs? pairs;
   final Function(GameRound) callback;
 
-  final _resultCompleter = Completer<List<Player>>();
-  final _streamController = StreamController<GameRound>();
+  final _subject = BehaviorSubject<GameRound>();
 
   late GameRound _gameRound;
 
   GameRoundBloc({required this.callback, this.pairs});
 
-  Stream<GameRound> get stream => _streamController.stream;
-
-  // Only state this bloc has is whether the result is known or not.
-  // We return this as a future.
-  Future<List<Player>> get result => _resultCompleter.future;
+  Stream<GameRound> get stream => _subject.stream;
 
   void add(GameEvent event) {
+    bool finalize = false;
     switch (event.runtimeType) {
       case EnterRoundResult:
         event = event as EnterRoundResult;
         _gameRound = GameRound(pairs: pairs, result: event.result);
-        _resultCompleter.complete(event.result);
+        if (pairs == null) finalize = true;
         break;
       case HasHedgehogs:
         event = event as HasHedgehogs;
@@ -40,12 +37,16 @@ class GameRoundBloc {
         _gameRound.setLionsInHandLastPlayer(event.number);
         break;
       case FinalizeRound:
-        _gameRound.validate();
-        callback(_gameRound);
+        finalize = true;
         break;
       default:
         throw UnsupportedError('Unknown game event');
     }
-    _streamController.add(_gameRound);
+    _subject.add(_gameRound);
+    if (finalize) {
+      _gameRound.validate();
+      callback(_gameRound);
+      _subject.close();
+    }
   }
 }

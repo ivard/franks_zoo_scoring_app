@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:franks_zoo_scoring_app/src/data/model.dart';
 import 'package:franks_zoo_scoring_app/src/data/bloc.dart';
 
@@ -16,14 +17,18 @@ class GameRoundScreen extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => FutureBuilder<List<Player>>(
-        future: bloc.result,
+  Widget build(BuildContext context) => StreamBuilder<GameRound>(
+        stream: bloc.stream,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return EnterResultScreen(
               prevScore: prevScore,
               callback: bloc.add,
             );
+          }
+
+          if (snapshot.data!.pairs == null) {
+            return const CircularProgressIndicator();
           }
 
           return EnterTricksScreen(
