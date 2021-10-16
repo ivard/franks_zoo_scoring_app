@@ -52,7 +52,7 @@ class GameScore {
       if (comparedScore != 0 || _rounds.isEmpty) return comparedScore;
       final lastResult = _rounds.last.result;
       // The worst ranked player gets preference.
-      return -1 * lastResult.indexOf(a).compareTo(lastResult.indexOf(b));
+      return lastResult.indexOf(a).compareTo(lastResult.indexOf(b));
     });
     return playersList.reversed.toList();
   }
