@@ -20,10 +20,17 @@ class _AddPlayersScreenState extends State<AddPlayersScreen> {
 
   void _addPlayer() {
     final newPlayer = _inputController.text;
-    if (_players.contains(newPlayer)) {
+    String? snackBarText;
+    if (newPlayer.isEmpty) {
+      snackBarText = 'Speler moet een naam hebben.';
+    } else if (_players.contains(newPlayer)) {
+      snackBarText = 'Deze speler bestaat al.';
+    }
+
+    if (snackBarText != null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Deze speler bestaat al.'),
+        SnackBar(
+          content: Text(snackBarText),
         ),
       );
     } else {
