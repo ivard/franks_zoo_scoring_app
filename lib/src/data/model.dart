@@ -57,8 +57,9 @@ class GameScore {
     return playersList.reversed.toList();
   }
 
-  Pairs? getPairsForNextRound() =>
-      _rounds.isNotEmpty ? Pairs(ranking: getRanking()) : null;
+  Pairs? getPairsForNextRound() => _rounds.isNotEmpty && players.length > 3
+      ? Pairs(ranking: getRanking())
+      : null;
 }
 
 class GameRound {
@@ -106,13 +107,16 @@ class GameRound {
 
   int getScore(Player player) {
     int newScore = _getRankingScore(player);
-    if (pairs != null) {
+    // When having 3 players, there are no pairs.
+    if (pairs != null || result.length == 3) {
       if (result.last == player) {
         newScore -= lionsInHandLastPlayer;
       }
-      newScore += pairs!.hasTeamMate(player)
-          ? _getRankingScore(pairs!.getTeamMate(player))
-          : 4;
+      if (pairs != null) {
+        newScore += pairs!.hasTeamMate(player)
+            ? _getRankingScore(pairs!.getTeamMate(player))
+            : 4;
+      }
       if (!hasHedgehogs.contains(player)) newScore -= 1;
       newScore += numberOfLions[player]! >= 2 ? numberOfLions[player]! : 0;
     }
