@@ -37,11 +37,16 @@ class _EnterResultScreenState extends State<EnterResultScreen> {
           onPressed: () => widget.callback(EnterRoundResult(_result)),
         ),
         body: ReorderableListView.builder(
+          buildDefaultDragHandles: false,
           itemCount: _result.length,
-          itemBuilder: (context, index) => ListTile(
+          itemBuilder: (context, index) => ReorderableDragStartListener(
             key: Key(index.toString()),
-            leading: Text('${index + 1}.'),
-            title: Text(_result[index]),
+            index: index,
+            child: ListTile(
+              leading: Text('${index + 1}.'),
+              title: Text(_result[index]),
+              trailing: const Icon(Icons.drag_handle),
+            ),
           ),
           onReorder: (int oldIndex, int newIndex) => setState(() {
             if (oldIndex < newIndex) {
