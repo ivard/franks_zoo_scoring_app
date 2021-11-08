@@ -4,26 +4,35 @@ import 'package:franks_zoo_scoring_app/src/data/model.dart';
 import 'package:franks_zoo_scoring_app/src/data/events.dart';
 import 'package:rxdart/rxdart.dart';
 
+enum GameRoundStatus {
+  enterResult,
+  enterTricks,
+  done,
+}
+
 class GameRoundBloc {
   final Pairs? pairs;
   final Function(GameRound) callback;
 
   final _subject = BehaviorSubject<GameRound>();
+  final _statusSubject = BehaviorSubject.seeded(GameRoundStatus.enterResult);
 
   late GameRound _gameRound;
 
   GameRoundBloc({required this.callback, this.pairs});
 
   Stream<GameRound> get stream => _subject.stream;
+  Stream<GameRoundStatus> get status => _statusSubject.stream;
 
   void add(GameEvent event) {
-    bool finalize = false;
     switch (event.runtimeType) {
       case EnterRoundResult:
         event = event as EnterRoundResult;
         _gameRound = GameRound(pairs: pairs, result: event.result);
         // When having three players, lions and hedgehogs count in the first round.
-        if (pairs == null && event.result.length > 3) finalize = true;
+        _statusSubject.add(pairs == null && event.result.length > 3
+            ? GameRoundStatus.done
+            : GameRoundStatus.enterTricks);
         break;
       case HasHedgehogs:
         event = event as HasHedgehogs;
@@ -38,16 +47,17 @@ class GameRoundBloc {
         _gameRound.setLionsInHandLastPlayer(event.number);
         break;
       case FinalizeRound:
-        finalize = true;
+        _statusSubject.add(GameRoundStatus.done);
         break;
       default:
         throw UnsupportedError('Unknown game event');
     }
     _subject.add(_gameRound);
-    if (finalize) {
+    if (_statusSubject.value == GameRoundStatus.done) {
       _gameRound.validate();
       callback(_gameRound);
       _subject.close();
+      _statusSubject.close();
     }
   }
 }

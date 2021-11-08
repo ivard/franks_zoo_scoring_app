@@ -17,26 +17,23 @@ class GameRoundScreen extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => StreamBuilder<GameRound>(
-        stream: bloc.stream,
+  Widget build(BuildContext context) => StreamBuilder<GameRoundStatus>(
+        stream: bloc.status,
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return EnterResultScreen(
-              prevScore: prevScore,
-              callback: bloc.add,
-            );
+          switch (snapshot.data) {
+            case GameRoundStatus.enterResult:
+              return EnterResultScreen(
+                prevScore: prevScore,
+                callback: bloc.add,
+              );
+            case GameRoundStatus.enterTricks:
+              return EnterTricksScreen(
+                stream: bloc.stream,
+                callback: bloc.add,
+              );
+            default:
+              return const CircularProgressIndicator();
           }
-
-          // TODO: This logic should not be handled directly in a screen.
-          if (snapshot.data!.pairs == null &&
-              snapshot.data!.result.length > 3) {
-            return const CircularProgressIndicator();
-          }
-
-          return EnterTricksScreen(
-            stream: bloc.stream,
-            callback: bloc.add,
-          );
         },
       );
 }
