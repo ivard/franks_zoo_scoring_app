@@ -63,34 +63,33 @@ class _AddPlayersScreenState extends State<AddPlayersScreen> {
           onPressed: _onContinue,
         ),
         body: ListView(
-          children: ListTile.divideTiles(
-            context: context,
-            tiles: _players.asMap().entries.map(
-                  (entry) => Dismissible(
-                      key: Key(entry.key.toString()),
-                      background: Container(
-                        color: Theme.of(context).errorColor,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: List.filled(
-                            2,
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              child: Icon(
-                                Icons.delete,
-                                color:
-                                    Theme.of(context).scaffoldBackgroundColor,
-                              ),
+          children: _players
+              .asMap()
+              .entries
+              .map(
+                (entry) => Dismissible(
+                    key: Key(entry.key.toString()),
+                    background: Container(
+                      color: Theme.of(context).errorColor,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: List.filled(
+                          2,
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Icon(
+                              Icons.delete,
+                              color: Theme.of(context).scaffoldBackgroundColor,
                             ),
                           ),
                         ),
                       ),
-                      onDismissed: (_) =>
-                          setState(() => _players.remove(entry.value)),
-                      child: ListTile(title: Text(entry.value))),
-                ),
-          ).toList(),
+                    ),
+                    onDismissed: (_) =>
+                        setState(() => _players.remove(entry.value)),
+                    child: ListTile(title: Text(entry.value))),
+              )
+              .toList(),
         ),
         footer: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
