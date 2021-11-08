@@ -27,7 +27,9 @@ class GameRoundScreen extends StatelessWidget {
             );
           }
 
-          if (snapshot.data!.pairs == null) {
+          // TODO: This logic should not be handled directly in a screen.
+          if (snapshot.data!.pairs == null &&
+              snapshot.data!.result.length > 3) {
             return const CircularProgressIndicator();
           }
 

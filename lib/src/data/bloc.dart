@@ -22,7 +22,8 @@ class GameRoundBloc {
       case EnterRoundResult:
         event = event as EnterRoundResult;
         _gameRound = GameRound(pairs: pairs, result: event.result);
-        if (pairs == null) finalize = true;
+        // When having three players, lions and hedgehogs count in the first round.
+        if (pairs == null && event.result.length > 3) finalize = true;
         break;
       case HasHedgehogs:
         event = event as HasHedgehogs;
