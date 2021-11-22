@@ -1,16 +1,23 @@
 # franks_zoo_scoring_app
 
-A new Flutter project.
+Scoring app for the Frank's Zoo card game (by Doris Matthaus and Frank Nestel).
+It is a progressive web application being build using the Flutter framework.
 
-## Getting Started
+A hosted version can be found [here](https://drksn.nl/frankszoo/).
 
-This project is a starting point for a Flutter application.
+## Developing
 
-A few resources to get you started if this is your first Flutter project:
+Please follow the [getting started of Flutter](https://docs.flutter.dev/get-started/install) first.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+Then you can run the application like this:
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+    flutter run
+
+When running this, Google Chrome will be opened in debug mode automatically.
+
+Developing can be done using [one of the editors supported by Flutter](https://docs.flutter.dev/get-started/editor).
+
+## Running with Docker
+
+    docker build -t frankszoo:edge .
+    docker run -p 8080:80 frankszoo:edge
