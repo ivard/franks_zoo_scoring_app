@@ -1,7 +1,7 @@
 # franks_zoo_scoring_app
 
 Scoring app for the Frank's Zoo card game (by Doris Matthaus and Frank Nestel).
-It is a progressive web application being build using the Flutter framework.
+It is a progressive web application being built using the Flutter framework.
 
 A hosted version can be found [here](https://drksn.nl/frankszoo/). For now, the only supported language is Dutch (nl).
 
