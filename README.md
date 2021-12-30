@@ -1,4 +1,4 @@
-# franks_zoo_scoring_app
+# Frank's Zoo Scoring App
 
 Scoring app for the Frank's Zoo card game (by Doris Matthaus and Frank Nestel).
 It is a progressive web application being built using the Flutter framework.
