@@ -19,6 +19,7 @@ RUN flutter doctor -v
 COPY . /src/
 WORKDIR /src/
 
+RUN flutter clean
 RUN flutter build web
 
 FROM nginx:alpine
