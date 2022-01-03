@@ -14,5 +14,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Build the Docker image
-      run: docker build .
+    - name: Build the Docker image (build phase)
+      run: docker build -t frankszoo:build --target build .
+    - name: Test
+      run: docker run frankszoo:build flutter test
+    - name: Build the Docker image (packaging phase)
+      run: docker build -t frankszoo:edge .
