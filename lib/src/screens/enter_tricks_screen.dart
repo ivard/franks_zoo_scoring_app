@@ -49,11 +49,11 @@ class EnterTricksScreen extends StatelessWidget {
                     TableRow(children: [
                       Text(
                         '${i + 1}.',
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                       Text(
                         state.result[i],
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                     ]),
                     TableRow(children: [
@@ -105,7 +105,7 @@ class EnterTricksScreen extends StatelessWidget {
         title: 'Slagen invoeren',
         action: TextButton(
           style: TextButton.styleFrom(
-              primary: Theme.of(context).colorScheme.onPrimary),
+              foregroundColor: Theme.of(context).colorScheme.onPrimary),
           child: const Text('Doorgaan'),
           onPressed: () {
             try {

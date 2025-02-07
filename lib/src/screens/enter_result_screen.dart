@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:franks_zoo_scoring_app/src/data/events.dart';
 import 'package:franks_zoo_scoring_app/src/data/model.dart';
@@ -32,7 +31,7 @@ class _EnterResultScreenState extends State<EnterResultScreen> {
         title: 'Invoeren uitslag ronde ${widget.prevScore.numberOfRounds + 1}',
         action: TextButton(
           style: TextButton.styleFrom(
-              primary: Theme.of(context).colorScheme.onPrimary),
+              foregroundColor: Theme.of(context).colorScheme.onPrimary),
           child: const Text('Doorgaan'),
           onPressed: () => widget.callback(EnterRoundResult(_result)),
         ),

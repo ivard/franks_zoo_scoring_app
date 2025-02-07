@@ -58,7 +58,7 @@ class _AddPlayersScreenState extends State<AddPlayersScreen> {
         title: 'Spelers toevoegen',
         action: TextButton(
           style: TextButton.styleFrom(
-              primary: Theme.of(context).colorScheme.onPrimary),
+              foregroundColor: Theme.of(context).colorScheme.onPrimary),
           child: const Text('Doorgaan'),
           onPressed: _onContinue,
         ),
@@ -70,7 +70,7 @@ class _AddPlayersScreenState extends State<AddPlayersScreen> {
                 (entry) => Dismissible(
                     key: Key(entry.key.toString()),
                     background: Container(
-                      color: Theme.of(context).errorColor,
+                      color: Theme.of(context).colorScheme.error,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: List.filled(
