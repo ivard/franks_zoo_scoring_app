@@ -25,9 +25,9 @@ jobs:
     - name: Ensure export directory exists
       run: mkdir -p build/web
     - name: Export build from container
-      run: docker cp container:/usr/share/nginx/html/ src/build/web/
+      run: docker cp container:/usr/share/nginx/html/ build/web/
     - name: Export to artifact
       uses: actions/upload-artifact@v4
       with:
         name: web-build
-        path: src/build/web/
+        path: build/web/
