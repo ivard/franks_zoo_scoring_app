@@ -48,6 +48,7 @@ class FranksZooScoringApp extends StatelessWidget {
     return MaterialApp(
       title: "Frank's zoo scoring app",
       theme: ThemeData(
+        useMaterial3: false,
         primarySwatch: Colors.blue,
       ),
       navigatorKey: _navigatorKey,

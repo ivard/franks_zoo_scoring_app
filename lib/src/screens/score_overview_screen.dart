@@ -43,7 +43,7 @@ class ScoreOverviewScreen extends StatelessWidget {
       title: 'Tussenstand',
       action: TextButton(
         style: TextButton.styleFrom(
-            primary: Theme.of(context).colorScheme.onPrimary),
+            foregroundColor: Theme.of(context).colorScheme.onPrimary),
         child: const Text('Doorgaan'),
         onPressed: onContinue,
       ),
@@ -58,13 +58,13 @@ class ScoreOverviewScreen extends StatelessWidget {
                 child: Row(children: [
                   Icon(
                     Icons.info_outline,
-                    color: Theme.of(context).primaryTextTheme.bodyText1?.color,
+                    color: Theme.of(context).primaryTextTheme.bodyLarge?.color,
                   ),
                   const SizedBox(width: 5),
                   Expanded(
                     child: Text(
                       'De teamleden voor de volgende ronde zijn met kleur gemarkeerd.',
-                      style: Theme.of(context).primaryTextTheme.bodyText1,
+                      style: Theme.of(context).primaryTextTheme.bodyLarge,
                     ),
                   ),
                 ]),
