@@ -17,13 +17,15 @@ jobs:
     - name: Build the Docker image (build phase)
       run: docker build -t frankszoo:build --target build .
     - name: Test
-      run: docker run frankszoo:build --name container flutter test
+      run: docker run frankszoo:build flutter test
     - name: Build the Docker image (packaging phase)
       run: docker build -t frankszoo:edge .
+    - name: Create local Docker container
+      run: docker create --name container frankszoo:edge
     - name: Ensure export directory exists
       run: mkdir -p build/web
     - name: Export build from container
-      run: docker cp container:/src/build/web/ src/build/web/
+      run: docker cp container:/usr/share/nginx/html/ src/build/web/
     - name: Export to artifact
       uses: actions/upload-artifact@v4
       with:
