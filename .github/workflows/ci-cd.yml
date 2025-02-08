@@ -21,13 +21,13 @@ jobs:
     - name: Build the Docker image (packaging phase)
       run: docker build -t frankszoo:edge .
     - name: Create local Docker container
-      run: docker create --name container frankszoo:edge
+      run: docker create --name container frankszoo:build
     - name: Ensure export directory exists
-      run: mkdir -p build/web
+      run: mkdir -p build
     - name: Export build from container
-      run: docker cp container:/usr/share/nginx/html/ build/web/
+      run: docker cp container:/src/build/web/ build/
     - name: Export to artifact
       uses: actions/upload-artifact@v4
       with:
         name: web-build
-        path: build/web/
+        path: build/
