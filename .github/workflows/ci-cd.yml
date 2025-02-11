@@ -44,8 +44,8 @@ jobs:
         with:
           name: web-build
       - name: Set rclone config
-        run: echo $RCLONE_CONFIG > ~/.config/rclone/rclone.conf
+        run: echo "$RCLONE_CONFIG" > /tmp/rclone.conf
         env:
           RCLONE_CONFIG: ${{ secrets.RCLONE_CONFIG }}
       - name: Copy files
-        run: rclone sync . s3:/drksn-website/frankszoo/
+        run: rclone sync . s3:/drksn-website/frankszoo/ --config /tmp/rclone.conf
