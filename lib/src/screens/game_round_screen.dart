@@ -32,7 +32,13 @@ class GameRoundScreen extends StatelessWidget {
                 callback: bloc.add,
               );
             default:
-              return const CircularProgressIndicator();
+              return const Center(
+                child: SizedBox(
+                  height: 30,
+                  width: 30,
+                  child: CircularProgressIndicator(),
+                ),
+              );
           }
         },
       );

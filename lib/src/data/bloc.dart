@@ -25,14 +25,15 @@ class GameRoundBloc {
   Stream<GameRoundStatus> get status => _statusSubject.stream;
 
   void add(GameEvent event) {
+    GameRoundStatus? nextGameStatus;
     switch (event.runtimeType) {
       case EnterRoundResult:
         event = event as EnterRoundResult;
         _gameRound = GameRound(pairs: pairs, result: event.result);
         // When having three players, lions and hedgehogs count in the first round.
-        _statusSubject.add(pairs == null && event.result.length > 3
+        nextGameStatus = pairs == null && event.result.length > 3
             ? GameRoundStatus.done
-            : GameRoundStatus.enterTricks);
+            : GameRoundStatus.enterTricks;
         break;
       case HasHedgehogs:
         event = event as HasHedgehogs;
@@ -47,17 +48,20 @@ class GameRoundBloc {
         _gameRound.setLionsInHandLastPlayer(event.number);
         break;
       case FinalizeRound:
-        _statusSubject.add(GameRoundStatus.done);
+        nextGameStatus = GameRoundStatus.done;
         break;
       default:
         throw UnsupportedError('Unknown game event');
     }
     _subject.add(_gameRound);
-    if (_statusSubject.value == GameRoundStatus.done) {
+    if (nextGameStatus == GameRoundStatus.done) {
       _gameRound.validate();
       callback(_gameRound);
+      _statusSubject.add(GameRoundStatus.done);
       _subject.close();
       _statusSubject.close();
+    } else if (nextGameStatus != null) {
+      _statusSubject.add(nextGameStatus);
     }
   }
 }
