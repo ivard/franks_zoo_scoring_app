@@ -31,3 +31,22 @@ jobs:
       with:
         name: web-build
         path: build/
+
+  deploy:
+    if: github.ref_protected == true
+    environment:
+      name: prod
+      url: https://www.drksn.nl/frankszoo/
+    runs-on: ubuntu-latest
+    container: rclone/rclone:latest
+    needs: build
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: web-build
+      - name: Set rclone config
+        run: echo "$RCLONE_CONFIG" > /tmp/rclone.conf
+        env:
+          RCLONE_CONFIG: ${{ secrets.RCLONE_CONFIG }}
+      - name: Copy files
+        run: rclone sync web s3:/drksn-website/frankszoo/ --config /tmp/rclone.conf
