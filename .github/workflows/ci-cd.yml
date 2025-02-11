@@ -33,6 +33,7 @@ jobs:
         path: build/
 
   deploy:
+    if: github.ref_protected == true
     environment:
       name: prod
       url: https://www.drksn.nl/frankszoo/
