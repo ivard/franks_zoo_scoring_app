@@ -38,6 +38,7 @@ jobs:
       url: https://www.drksn.nl/frankszoo/
     runs-on: ubuntu-latest
     container: rclone/rclone:latest
+    needs: build
     steps:
       - uses: actions/download-artifact@v4
         with:
